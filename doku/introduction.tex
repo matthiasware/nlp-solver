@@ -1,0 +1,9 @@
+\chapter{Introduction}
+This work is about solving non-linear optimization problems.
+Mathematical optimization as a scientific field studies these problems and provides techniques to solve them. Among its numerous applications in engineering, economics and various other fields, many machine learning techniques rely heavily on optimization. For example, logistic regression requires the maximization of the likelihood function, support vector machines maximize the in-between margin of classes and the back-propagation algorithm for training deep neural nets requires the minimization of a loss function.
+
+These functions are often non-linear or are defined over bounded subsets of $\mathbb{R}^n$.
+If a function of interest is twice differentiable, this allows to use a powerful technique called Newton's method to solve optimization problems of that kind. 
+
+This thesis is divided in two main parts. Chapter~\ref{ch:theory} introduces non-linear optimization problems with box-constraints and describes the theoretical background that enable the implementation of a solver for this kind of problem.
+Chapter~\ref{ch:results} summarizes the results from testing NOONTIME on a subset of the CUTEst problems. For benchmarks we used the IPopt solver library and compared and evaluated the results.

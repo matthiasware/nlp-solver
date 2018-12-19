@@ -1,0 +1,491 @@
+\chapter{Theoretical Background}\label{ch:theory}
+
+\section{Definitions \& Fundamentals}
+Let $f: \mathbb{R}^n \rightarrow \mathbb{R}$ be a function. We say $f$ is \textit{convex} if:
+\begin{flalign*}
+	f((1-t)x + ty) \leq (1-t) f(x) + t f(y)
+	\quad \forall x,y \in \mathbb{R}^n, \;
+	t \in [0, 1]
+\end{flalign*}
+We say $f$ is \textit{strictly convex} if:
+\begin{flalign*}
+f((1-t)x + ty) < (1-t) f(x) + tf(y)
+\quad \forall x,y \in \mathbb{R}^n,
+x \not = y,\;
+t \in (0, 1)
+\end{flalign*}
+We say $f$ is \textit{strongly convex} with parameter $\alpha >0$ if:
+\begin{flalign*}
+	f((1-t) x + ty)
+	\leq
+	(1-t)f(x) + t f(y) - t(1-t)\alpha \|x-y\|^2
+	\quad \forall x,y \in \mathbb{R}^n, t \in [0,1]
+\end{flalign*}
+We say $\tilde{x} \in \mathbb{R}^n$ is a \textit{local minimum} of $f$ if there exists a $\delta > 0$  with:
+\begin{flalign*}
+	f(x) \geq f(\tilde{x}) \quad
+	\forall x \in \{x \in \mathbb{R}^n : \|x - \tilde{x} \| < \delta \}
+\end{flalign*}
+and $\tilde{x} \in \mathbb{R}^n$ is a \textit{global minimum} of $f$ if:
+\begin{flalign*}
+	f(x) \geq f(\tilde{x}) \quad
+	\forall x \in \mathbb{R}^n
+\end{flalign*}
+We say a symmetric matrix $A \in \mathbb{R}^{n \times n}$ is \textit{positive definite} if 
+\begin{flalign*}
+x^T A x > 0
+\quad  x \in \mathbb{R}^n\backslash\{0\}
+\end{flalign*}
+and $A$ is \textit{positive semidefinite} if
+\begin{flalign*}
+	x^T A x \geq 0 \quad x \in \mathbb{R}^n
+\end{flalign*}
+We now present some important theorems, that we use throughout this thesis. \\
+
+\begin{theorem}
+	Let $f:\mathbb{R}^n \rightarrow \mathbb{R}$ be a convex function
+	 and let $\tilde{x} \in \mathbb{R}^n$ be a local minimum of $f$. Then $\tilde{x}$ is a global minimum of $f$ over $\mathbb{R}^n$.
+\end{theorem}
+\begin{proof}
+	Let $\tilde{x} \in \mathbb{R}^n$ be a local but not a global minimum of $f$. Therefore there exists a positive $\delta$ such that:
+	\begin{flalign*}
+		f(x) \geq f(\tilde{x}) \quad \forall x \in \mathbb{R}^n \text{ with } \| x - \tilde{x}\| < \delta
+	\end{flalign*}
+	Now let $x^*$ be a global minimum of $f$. Since $f$ is convex, the following holds:
+	\begin{flalign*}
+		f((1-t)\tilde{x} + t x^*) \leq (1-t)f(\tilde{x}) + t f(x^*) < f(\tilde{x})
+	\end{flalign*}
+	By choosing $t$ such that $((1-t)\tilde{x} + tx^*) \in \{x \in \mathbb{R}^n : \|x-\tilde{x}\| < \delta \}$ we have a contradiction and therefore $x^*$ does not exist.
+\end{proof}
+\begin{theorem}\label{thm:strongly-convex-pd}
+	Let $f:\mathbb{R}^n \rightarrow \mathbb{R}$ be a twice differentiable function. Then $f$ is strongly convex if and only if there is a positive $\beta$ such that
+	\begin{flalign*}
+		x^T H(x) x \geq \beta x^T x \quad \forall x \in \mathbb{R}^n
+	\end{flalign*}
+\end{theorem}
+\begin{proof}
+	See proof of \cite[Thm. 3.2.14]{alt:nlo}
+\end{proof}
+\begin{theorem}
+	Let $f:\mathbb{R}^n \rightarrow \mathbb{R}$ be a twice differentiable function.
+	Then $H(x)$ is positive definite if and only if all its eigenvalues are positive.
+\end{theorem}
+\begin{proof}
+			\hfil
+	\begin{itemize}
+		\item[$\Rightarrow$] Let $H(x)$ be positive definite and let $\lambda$ be an eigenvalue of $H(x)$ with eigenvector $\hat{x}$.
+		\begin{flalign*}
+		H(x) \hat{x} = \lambda \hat{x} \Rightarrow \underbrace{\hat{x}^T H(x) \hat{x}}_{> 0} = \lambda \underbrace{\hat{x}^T \hat{x}}_{> 0}
+		\Rightarrow \lambda > 0
+		\end{flalign*}
+		\item[$\Leftarrow$] Now let each eigenvalue $\lambda_i, i \in \{1,...,n\}$  of $H(x)$ be positive. Since $H(x)$ is symmetric, there exits an orthogonal matrix $V$ such that:
+		\begin{flalign*}
+			H(x) = V D V^{T}
+		\end{flalign*}
+		where
+		\begin{flalign*}
+		D = diag(\lambda_1, ..., \lambda_n)
+		\end{flalign*}
+		Now let $y \in \mathbb{R}^n$ be a non-zero vector and let  $z = V^T y$. We can now write:
+		\begin{flalign*}
+		y^T H(x) y = z^T D z = \sum_{i=1}^{n}\lambda_i z_i^2
+		\end{flalign*}
+		With $y$ being non-zero and $z = V^T y$ being non-zero it follows that the sum above is positive and therefore $H(x)$ is positive definite.
+	\end{itemize}
+\end{proof}
+\begin{theorem}\label{eq:thm:pdm_is_i}
+	Let $A$ be a positive definite matrix. Then $A$ is invertible.
+\end{theorem}
+\begin{proof}
+	Let $A$ be positive definite. By the invertible matrix theorem, we know that $A$ is invertible iff the equation $A x = 0$ has only the trivial solution. We write:
+	\begin{flalign*}
+		A x = 0 \Rightarrow x^T A x = 0
+	\end{flalign*}
+	Since $A$ is positive definite, $x^T A x$ is positive for a non-zero vector $x$. Therefore $x^TAx = 0$ has only the trivial solution and it follows that $A$ is invertible.
+\end{proof}
+\section{Bounded strongly convex optimization problems}\label{sec:bounded_strongly_convex_optimization}
+Consider the following optimization problem with twice differentiable, strongly convex objective function $f : \mathbb{R}^n \rightarrow \mathbb{R}$ and solution $\tilde{x}$:
+\begin{mini!}
+	{x}{f(x)}{}{\tilde{x}=}
+%    \addConstraint{h(x)}{=0}{}
+%    \addConstraint{g(x)}{\leq 0}{}
+    \addConstraint{l \leq x }{\leq b}\label{eq:min:bc}
+\end{mini!}
+
+%the equality constraints function with domain $\mathbb{R} \subseteq \mathbb{R}$, 
+%$h : \mathbb{R}^n \rightarrow \mathbb{R}^s$ and the inequality constraints function $g : \mathbb{R}^n \rightarrow \mathbb{R}^t$. 
+We call $l \in \mathbb{R}^n$ and $u \in \mathbb{R}^n$ the lower and upper bounds on the variable $x \in \mathbb{R}^n$, respectively.
+%We denote the gradient of $f$ as $g \in \mathbb{R}^n$, and the Hessian as $H \in \mathbb{R}^{n \times n}$.
+%We also require the gradient $g \in \mathbb{R}^n$ and the Hessian $H \in \mathbb{R}^{n \times n}$ of the objective function to be available over its domain. \\
+In the following we consecutively describe the building blocks of a solver for this kind of problems. Later on we will generalize it to non-convex optimization problems.
+We begin with the general descent method for unconstrained optimization problems ~\cite[Ch. 9.1]{BoydCO}: \\
+
+\SetAlgoNoLine
+\begin{algorithm}[H]
+	\label{alg:gdm}
+	\DontPrintSemicolon
+	\KwIn{starting point $x^{(0)} \in \mathbb{R}^n$}
+	$k=0$ \;
+	\While{not converged}
+	{	
+		Determine descent direction $\Delta x^{(k)}$\;	
+		Line search. Chose a step size $\alpha^{(k)} > 0$\;
+		Update. $x^{(k+1)} = x^{(k)} + \alpha^{(k)} \Delta x^{(k)}$ \;
+		k = k + 1
+	}
+	\caption{General descent method}
+	\Return $x^{(k)}$
+\end{algorithm}
+
+\section{Newton's method}
+Let $f$ be the  objective function and let $x^{(k)}$ be the current iterate with function value $f^{(k)}$, gradient $g^{(k)}$ and Hessian $H^{(k)}$. Since $f$ is strongly convex, it follows that $H^{(k)}$ is positive definite and hence invertible by Theorem~\ref{eq:thm:pdm_is_i}. We now consider the second order Taylor polynomial $m_k$ of $f$ in $x^{(k)}$, which we call model function:
+\begin{flalign} \label{eq:qp}
+	m_k(x) = f^{(k)} + (g^{(k)})^T(x - x^{(k)}) + \frac{1}{2} (x - x^{(k)})^T H^{(k)} (x - x^{(k)})
+\end{flalign}
+The minimum $\tilde{x}^{(k)}$ of $m_k$ is given by:
+\begin{flalign*}
+	\nabla m_k(x)  & = (g^{(k)}) + H^{(k)} (x-x^{(k)}) = 0 \\
+	\Rightarrow \tilde{x}^{(k)} & = x^{(k)} - (H^{(k)})^{-1} g^{(k)}
+\end{flalign*}
+from which we construct the search direction:
+\begin{flalign} \label{eq:dx}
+	\Delta x^{(k)} = \tilde{x}^{(k)} - x^{(k)} = - (H^{(k)})^{-1}g^{(k)}
+\end{flalign}
+
+We call an algorithm of type~\eqref{alg:gdm} with descent direction~\eqref{eq:dx} Newton's method. With $x^{(0)}$ being sufficiently close to $\tilde{x}$, the sequence of iterates converges to $\tilde{x}$ ~\cite[Thm 3.5]{NW}.
+The positive definiteness property of the Hessian matrix is the key element to this method, since in this case the quadratic approximation~\eqref{eq:qp} of $f$ in $x^{(k)}$ is a strictly convex quadratic function with a unique solution $ \tilde{x}^{(k)}$.
+
+\section{Line search}\label{sec:linesearch}
+
+The line search is a method to choose a step length, that determines how far the algorithm moves the descent direction in any iteration.
+
+\subsection{Motivational example}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{img/newton-divergence.png}
+		\caption{Model function $m_k(x)$ (blue) in $x^{(k)} = 2$ and direction $\Delta x$ (red).}
+		\label{fig:newton:divergence}
+	\end{subfigure}
+	\begin{subfigure}{0.49\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{img/newton-convergence.png}
+		\caption{With line search, the method converges with start value $x^{(0)} = 8$ in 2 steps to the minimum in $x^{(2)}=0$.}
+		\label{fig:newton:convergence}
+	\end{subfigure}
+	\caption{Divergence (left) and convergence (right) of Newton's method for the function~$f(x) = (1 + x^2)^{\frac{1}{2}} \quad$ (orange) }
+	\label{fig:newton:conv-div}
+\end{figure}
+
+Consider the function:
+\begin{flalign*}
+	f(x) = (1 + x^2)^{\frac{1}{2}} \quad \text{with domain } x \in [-10, 10]
+\end{flalign*}
+with:
+\begin{flalign*}
+	f'(x) &= x (1+x^2)^{-\frac{1}{2}} \\
+	f''(x) &= (1+x^2)^{-\frac{3}{2}}
+\end{flalign*}
+Since for $\beta=1e-4$ the inequality $x^2 f''(x) \leq \beta x^2$ holds,
+it follows that $f''(x)$ is positive definite and therefore
+by Theorem~\ref{thm:strongly-convex-pd} $f$ is strongly convex. By using the descent direction~\eqref{eq:dx} we get:
+\begin{flalign*}
+	\Delta x^{(k)} &= -f''(x^{(k)})^{-1} f'(x^{(k)}) \\
+			 &= -x^{(k)} - (x^{(k)})^3 \\
+\end{flalign*}
+In the $k$-th step we can calculate the new iterate $x^{(k+1)}$ via:
+\begin{flalign*}
+	x^{(k+1)}  &= x^{(k)} - x^{(k)} - (x^{(k)})^3 = -(x^{(k)})^3
+\end{flalign*}
+From this follows:
+\begin{flalign*}
+	f(x^{(k+1)}) = 
+	\begin{cases}
+		f(x^{(k)}) & |x^{(k)}| = 1 \\
+		> f(x^{(k)}) & |x^{(k)}| > 1 \\
+		< f(x^{(k)}) & |x^{(k)}| < 1
+	\end{cases}
+\end{flalign*}
+Here we can see, that Newton's method only converges for a start value with $|x^{(0)}| < 1$. In case $x^{(0)}$ is one, only the sign on the next iterate flips and in case $|x^{(0)}|$ is larger than one, our method diverges. \\
+This is why Newton's method is called a \textit{locally convergent} method. In Figure~\ref{fig:newton:divergence} it can be observed, that the model function $m_k$ in $x^{(k)} = 2$ has its minimum in $x^{(k+1)}$, yet $f(^{(k+1)})$ is much larger than $f(x^{(k)})$.
+
+\subsection{Line search}
+In order to obtain a globally convergent method, a line search along $\Delta x^{(k)}$ can be used, such that 
+\begin{flalign} \label{eq:ls:decrease}
+f(x^{(k)} + \alpha \Delta x^{(k)}) < f(x^{(k)}) \quad \forall x^{(k)} \in \mathbb{R}^n, \alpha > 0
+\end{flalign}
+In order to guarantee \eqref{eq:ls:decrease} as well as a sufficient decrease of $f$, we enforce the strong Wolfe conditions~\cite[3.7]{NW}:
+\begin{flalign}
+f(x^{(k)} + \alpha^{(k)} \Delta x^{(k)}) & \leq f(x^{(k)}) + c_1 \alpha^{(k)} (g^{(k)})^T \Delta x^{(k)} \\
+| \nabla f(x^{(k)} + \alpha^{(k)} \Delta x^{(k)})^T \Delta x^{(k)}| & \leq c_2 |(g^{(k)})^T \Delta x^{(k)} |
+\end{flalign}
+with
+\begin{flalign*}
+0 < c_1 < c_2 < 1
+\end{flalign*}
+
+The full algorithm as well as implementation notes can be found in \cite[Ch. 3]{NW}. By using the line search on our previous example, Newton's method converges even for start values $|x^{(0)}| > 1$ (see Figure~\ref{fig:newton:convergence}). 
+
+%The existence of interval of $\alpha$, satisfying, these conditions is shown in \cite[pf. 3.1]{NW}.
+
+\section{The gradient projection algorithm}
+Optimization problems with constraints of the form \eqref{eq:min:bc} are called box-constraint problems. We use the gradient projection method presented in \cite{Byrd:LBFGSB} to tackle these kind of problems.
+
+For this, we define the active set $\/A$ of a point $x$ to be the set of indices, at which the components $x_i$ of $x$ lie on the bounds.
+\begin{flalign*}
+\/A (x) = \{i :  x_i \in \{l_i, u_i\} \}
+\end{flalign*}
+
+The set of free variables $\/F$ of $x$ is defined complementary as:
+\begin{flalign*}
+\/ F(x) = \{i : l_i < x_i < u_i \}
+\end{flalign*}
+
+The gradient projection is a two step algorithm, that generates a new descent direction $\Delta x^{(k)}$ by taking the bounds $l$ and $u$ on $x^{(k)}$ into account: 
+\begin{enumerate}
+	\item \textbf{Cauchy point computation}: Compute the Cauchy point $c^{(k)}$ (see section \ref{sec:cauchy}) to identify the set of active and free variables $\/A(c^{(k)})$ and $\/F(c^{(k)})$.
+	\item \textbf{Subspace minimization}: Solve a subspace minimization problem on the set of free variables $\/F(c^{(k)})$ with solution $s^{(k)}$.
+\end{enumerate}
+Ultimately we calculate the search direction $\Delta x^{(k)} = s^{(k)} - x^{(k)}$ for the current iteration $k$.
+
+\subsection{Cauchy point computation}\label{sec:cauchy}
+
+We start by projecting the direction of the steepest descent $-g^{(k)}$ onto the feasible region~\eqref{eq:min:bc}, which can be expressed as a piecewise-linear-path:
+\begin{flalign}\label{eq:picewise_linear_projection}
+	x(t) = P(x^{(k)} - t g^{(k)}, l, u) \qquad t \geq 0
+\end{flalign}
+with the projection function:
+\begin{flalign}
+%	P(x, l, u)_i = 
+%	\begin{cases}
+%		l_i & x_i < l_i \\
+%		x_i & x_i \in [l_i, u_i] \\
+%		u_i & x_i > u_i
+%	\end{cases}
+	P(x, l, u)_i = \min\big(u_i, \max(x_i, l_i)\big)
+\end{flalign}
+
+The Cauchy point $c^{(k)}$ is then defined to be the minimum of the model function~\eqref{eq:qp} along the piecewise-linear path~\eqref{eq:picewise_linear_projection}:
+\begin{mini}
+	{t}{m_k(x(t))}{}
+	{t^*=}
+	\addConstraint{t }{\geq 0}
+\end{mini}
+\begin{flalign*}
+	c^{(k)} = x(t^*)
+\end{flalign*}
+
+
+For this purpose we calculate the set $T = \{t_i | i=1,...,n\}$ along the gradient direction.
+\begin{flalign}
+	t_i  = 
+	\begin{cases}
+		(x_i^{(k)} - u_i) / g^{(k)}_i & g^{(k)}_i < 0 \\
+		(x_i^{(k)} - l_i) / g^{(k)}_i & g^{(k)}_i > 0 \\
+		\infty				& otherwise
+	\end{cases}
+\end{flalign}
+
+By sorting the set $T$ in increasing order, we obtain the ordered set $\{t^j : t^j \leq t^{j+1}, j=1,..,n \}$. The Cauchy point $c^{(k)}$ can then be found by iteratively searching the intervals $[t^{j-1}, t^{j}]$ for $t^*$.
+\subsubsection{Interval search}
+
+In the following section we drop the outer index $k$, such that $g=g^{(k)}$, $H = H^{(k)}$ and define $x^{0}$ to be $x^{(k)}$. Superscripts denote the current interval. \\
+
+The piecewise linear path~\eqref{eq:picewise_linear_projection} can now be expressed as 
+\begin{flalign*}
+x_i(t) = 
+\begin{cases}
+x_i^{0} - t g_i & t \leq t_i \\
+x_i^{0} - t_i g_i & otherwise
+\end{cases}
+\end{flalign*}
+Given the interval $[t^{j-1}, t^{j}]$ with descent direction:
+\begin{flalign*}
+	d_i^{j-1} = 
+	\begin{cases}
+		-g_i & t^{j-1} < t_i \\
+		0	 & otherwise
+	\end{cases}
+\end{flalign*}
+and breakpoints
+\begin{flalign*}
+	x^{j-1} &= x(t^{j-1}) \\
+	x^{j} &= x(t^{j})
+\end{flalign*}
+on line segment $[x^{j-1}, x^{j}]$, the model function~\eqref{eq:qp} can be written as
+\begin{equation} \label{eq:qp_interval}
+\begin{split}
+m(x) = f &+ g^T(x^{j-1} + (t - t^{j-1}) d^{j-1} - x^0) \\
+		 &+ \frac{1}{2} (x^{j-1} + (t - t^{j-1}) d^{j-1} - x^0)^T H (x^{j-1} + (t - t^{j-1}) d^{j-1} - x^0)		 
+\end{split}
+\end{equation}
+With $\Delta t = t - t^{j-1}$ and $z^{j-1} =  x^{j-1} - x^0$, we can expand \eqref{eq:qp_interval} and write it as a quadratic function in $\Delta t$:
+\begin{equation}
+	\hat{m}(\Delta t) = f_{j-1} + f_{j-1}' \Delta t + \frac{1}{2} f_{j-1}'' \Delta t^2
+\end{equation}
+where
+\begin{flalign*}
+	f_{j-1} & = f + g^T z^{j-1} + \frac{1}{2} (z^{j-1})^T H z^{j-1} \\
+	f_{j-1}' & = g^T d^{j-1} + (d^{j-1})^T H z^{j-1} \\
+	f_{j-1}'' & = (d^{j-1})^T H d^{j-1}
+\end{flalign*}
+which yields a minimum in $\Delta t^* = - f_{j-1}' / f_{j-1}''$.
+If $t^{j-1} + \Delta t^*$ lies on $[t^{j-1}, t^j)$, we found our Cauchy point $c$. Otherwise $c$ lies at $x(t^{j-1})$ if $f_{j-1}' \geq 0$ and beyond or at $x(t^j)$ if $f_{j-1}' < 0$.
+
+
+\subsubsection{Updates}
+For exploring the next interval $[t^{j}, t^{j+1}]$, we set:
+\begin{flalign*}
+	\Delta t^{j-1} &= t^j - t^{j-1} \\
+	x^j &= x^{j-1} + \Delta t^{j-1} d^{j-1} \\
+	z^j &= z^{j-1} + \Delta t^{j-1} d^{j-1}
+\end{flalign*}
+
+Since at least one variable became active it remains to update the search direction accordingly
+\begin{flalign*}
+	d^j_i = 
+	\begin{cases}
+		d^{j-1}_i & i \in \/F(x^{j-1}) \\
+		0		& i \in \/A(x^{j-1}) 
+	\end{cases}
+\end{flalign*}
+
+\subsection{Subspace minimization}
+Given the Cauchy point $c^{(k)}$ in iteration $k$, we proceed with minimizing $m_k$(x) over the set of free variables $\/F(c^{(k)})$.
+Let $Z \in \{0, 1\}^{n \times |\/F(c^{(k)})|}$ be the matrix of unit vectors, that span the subspace of free variables at $c^{(k)}$ and let $\hat{d}$ be a vector of dimension $|\/F(c^{(k)})|$. Rewriting~\eqref{eq:qp}
+in terms of $\hat{d}$ yields:
+
+\begin{mini!}
+	{\hat{d}}{\hat{m}_k(\hat{d}) = \hat{d}^T \hat{r} + \frac{1}{2} \tilde{H} \hat{d} + \gamma}{}{\hat{d}^* = }
+	\addConstraint{l_i - c_i}{\leq \hat{d}_i}{}
+	\addConstraint{u_i - c_i}{\geq \hat{d}_i}{}
+\end{mini!}
+
+with reduced Hessian
+\begin{flalign*}
+\tilde{H} = Z^T H^{(k)} Z
+\end{flalign*}
+and gradient
+\begin{flalign*}
+\hat{r} = Z^T (g^{(k)} + H^{(k)} (c^{(k)} - x^{(k)}))
+\end{flalign*}
+The solution of the subspace minimization problem $s^{(k)} \in \mathbb{R}^n$ is now feasible to compute:
+\begin{flalign*}
+	s_i^{(k)} = 
+	\begin{cases}
+		c_i^{(k)} & i \not \in \/F(c^{(k)}) \\
+		c_i^{(k)} + (Z \hat{d}^*)_i & i  \in \/F(c^{(k)}) \\
+	\end{cases}
+\end{flalign*}
+
+This leads to the search direction
+\begin{flalign*}
+	\Delta x^{(k)} = x^{(k)} - s^{(k)}
+\end{flalign*}
+
+\section{Termination conditions}
+Our algorithm stops, if the infinity norm of the projected gradient becomes sufficiently small:
+\begin{flalign}\label{eq:gtol}
+	||P(x^{(k)} - g^{(k)}, l, u) - x^{(k)} ||_{\infty} < g_{tol}
+\end{flalign}
+
+%for which the optimality criteria \cite[Th. 2.4]{NW} is approximately fulfilled.
+Furthermore, we stop the process if the number of iterations $k$ reaches a limit $k_{max}$\label{eq:maxiter}
+or if the change of the objective function over two subsequent iterations is adequately small:
+\begin{flalign}\label{eq:ftol}
+	| f^{(k)} - f^{(k-1)} | < f_{tol}
+\end{flalign}
+
+\section{Non-linear optimization problem}
+So far, we have required the objective function to be strongly convex.  
+In this case, its Hessian is always positive definite and any local minimum is a global one. Since we also want to solve non-convex problems, we now drop the strong convexity condition.
+
+\subsection{Non-linear optimization problem}
+
+Consider the optimization problem of Section (\ref{sec:bounded_strongly_convex_optimization}):
+\begin{mini}
+	{x}{f(x)}
+	{\label{eq:nlp}}
+	{}
+	%    \addConstraint{h(x)}{=0}{}
+	%    \addConstraint{g(x)}{\leq 0}{}
+	\addConstraint{l \leq x }{\leq b}
+\end{mini}
+We call \eqref{eq:nlp} a non-linear optimization problem if the function $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is non-linear. By necessity, we still require $f$ to be twice differentiable.
+
+By dropping the condition of strong convexity, we lose the guarantee that a local minimum is a global one.
+As a further consequence, the Hessian matrix is not necessarily positive definite. In this case, the quadratic approximation~\eqref{eq:qp} of $f$ in $x^{(k)}$ is not strictly convex and the descent direction~\eqref{eq:dx} might not exist.
+
+\subsubsection{Example}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.30\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{img/H_pd.png}
+		\caption{For $x=(0,0)$, $H(x)$ is positive definite and the model function (red) is strongly convex and has a unique minimum.}
+		\label{fig:H_pd}
+	\end{subfigure}
+	\begin{subfigure}{0.30\textwidth}
+		\centering
+		\includegraphics[width = \textwidth]{img/H_ind.png}
+		\caption{For $x=(1,-1)$, $H(x)$ is indefinite and the model function (red) is not convex and does not have a minimum.}
+		\label{fig:H_ind}
+	\end{subfigure}
+	\begin{subfigure}{0.30\textwidth}
+		\centering
+		\includegraphics[width =\textwidth]{img/H_ind_3d.png}
+		\caption{3D visualization of the model function for $x=(1, -1)$}.
+		\label{fig:H_ind_3d}
+	\end{subfigure}
+	\caption{Contour plots for problem \eqref{eq:nlp_examples} with bounds colored mangenta and the model function for different $x$ colored in red.}
+	\label{fig:newton:conv-div-sattle}
+\end{figure}
+
+As an example, consider the following optimization problem with non-convex objective function $f:\mathbb{R}^2 \rightarrow \mathbb{R}$:
+\begin{mini}
+	{x}{f(x) = x_1^3 + x_2^3}
+	{\label{eq:nlp_examples}}
+	{}
+	%    \addConstraint{h(x)}{=0}{}
+	%    \addConstraint{g(x)}{\leq 0}{}
+	\addConstraint{-3 \leq x_1 }{\leq 3}
+	\addConstraint{-3 \leq x_1 }{\leq 3}
+\end{mini}
+
+with:
+\begin{flalign*}
+	g(x) = (3x_1^2, 3x_2^2)^T \qquad
+	H(x) =
+	\begin{pmatrix}
+		6x_1 & 0 \\
+		0  & 6x_2
+	\end{pmatrix}
+\end{flalign*}
+Depending on the value of $x$, the Hessian matrix $H(x)$ has different properties:
+\begin{itemize}
+	\item For $x_1 = 1, x_2 = 0$, the Hessian is singular.
+	\item For $x_1 = -1, x_2 = -1$ the Hessian is negative definite and since $\Delta x^T g > 0$, $\Delta x$ is not a descent direction.
+	\item For $x_1 = 1, x_2 = 1$ the Hessian is positive definite.
+	\item For $x_1 = 1, x_2 = -1$ the Hessian is indefinite and since $\Delta x^T g = 0$, $\Delta x$ is not a descent direction.
+\end{itemize}
+
+To overcome this obstacle, the Hessian matrix can be replaced by a positive definite one. In our case, we modify the Hessian and continue the process of minimizing the objective function with the modified Hessian.
+
+\subsection{Hessian Modification}
+The modification of the Hessian can be done in various ways \cite[Ch. 3.4]{NW}. Our approach performs a spectral shift of the Hessian in case that it is not positive definite. \\
+
+Let $\lambda_{min}$ be the smallest eigenvalue of $H^{(k)}$ and let $\delta$ be a chosen lower bound for the eigenvalues of the modified Hessian. We can than calculate the modification parameter $\omega$ as follows:
+\begin{flalign*}
+\omega = \max \big(0, \delta - \lambda_{min} \big) \quad \delta \in \mathbb{R}^{+}
+\end{flalign*}
+The modified Hessian is obtained by
+\begin{flalign*}
+\hat{H}^{(k)} = H^{(k)} + \omega \mathbb{I}
+\end{flalign*}
+where all eigenvalues of $\hat{H}^{(k)}$ are all greater or equal to $\delta$. It follows that  $\hat{H}^{(k)}$ is positive definite. \\
+
+Substituting the Hessian in the previous sections by its modification, all results generalize to non-convex functions.
+Furthermore, it can be shown that direction $\Delta x^{(k)}$ with $\hat{H}$ is always a descent direction.

@@ -1,0 +1,119 @@
+\documentclass[11pt, oneside]{report}
+%\documentclass[11pt, oneside]{article}
+\setcounter{secnumdepth}{3}
+
+%----------------------------------------------------------------------------
+%	Packages
+%----------------------------------------------------------------------------
+% https://www.sharelatex.com/learn/Page_size_and_margins
+\usepackage{geometry}
+\geometry{a4paper, lmargin=3cm, rmargin=2cm,
+		  tmargin=3cm, bmargin=3cm}
+\usepackage[utf8]{inputenc}	% für Umlaute ect.
+\usepackage[english]{babel}
+\usepackage[table]{xcolor}
+\usepackage{array,multirow,graphicx} % for tables
+\usepackage{booktabs} % for nice tables
+\usepackage{xfrac}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{amsthm} % math stuff
+\usepackage{amsmath} % math stuff
+\usepackage{amssymb} % math stuff
+\usepackage[short]{optidef} % optimization stuff
+
+\usepackage{float} % here for H placement parameter
+\usepackage{wrapfig}
+\usepackage{subcaption} 
+\usepackage{titling}
+\usepackage{array}
+
+
+\newcommand\MyBox[2]{
+	\fbox{\lower0.75cm
+		\vbox to 1.7cm{\vfil
+			\hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+			\vfil}%
+	}%
+}
+\newcommand\MyBoxx[2]{
+	\fbox{\lower0.75cm
+		\vbox to 1.7cm{\vfil
+			\hbox to 1.7cm{\hfil\parbox{1.4cm}{#1}\hfil}
+			\vfil}%
+	}%
+}
+
+%\usepackage[font={small}]{caption}
+
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=blue,
+	urlcolor=black
+}
+
+\usepackage{longtable}
+\usepackage{xcolor}
+\definecolor{default1}{HTML}{E3F2FD}
+\definecolor{default2}{HTML}{BBDEFB}
+\definecolor{header}{HTML}{E6E6E6}
+\definecolor{best}{HTML}{00E600}
+\definecolor{ok}{HTML}{80FF80}
+\definecolor{err}{HTML}{FF8080}
+\definecolor{poor}{HTML}{FFB84d}
+
+\usepackage{array}
+\usepackage{makecell}
+
+%\renewcommand\theadalign{bc}
+%\renewcommand\theadfont{\bfseries}
+%\renewcommand\theadgape{\Gape[4pt]}
+%\renewcommand\cellgape{\Gape[4pt]}
+
+
+\usepackage{listings}
+\lstset{ %
+	backgroundcolor=\color{white},   % choose the background color
+	basicstyle=\footnotesize,        % size of fonts used for the code
+	breaklines=true,                 % automatic line breaking only at whitespace
+	captionpos=b,                    % sets the caption-position to bottom
+	commentstyle=\color{mygreen},    % comment style
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	keywordstyle=\color{blue},       % keyword style
+	stringstyle=\color{mymauve},     % string literal style
+}
+%\lstdefinestyle{Python}{
+%	language        = Python,
+%	basicstyle      = \ttfamily,
+%	keywordstyle    = \color{blue},
+%	keywordstyle    = [2] \color{teal}, % just to check that it works
+%	stringstyle     = \color{green},
+%	commentstyle    = \color{red}\ttfamily
+%}
+\usepackage{framed} % frame stuff
+
+\usepackage{parcolumns} % column stuff
+
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+\SetKwFor{For}{for}{do}{endfor for}
+\SetKwFor{For}{for}{do}{endfor for}
+
+\newtheorem{theorem}{Theorem}
+\title{A Solver for Non-Linear Optimization Problems with Box-Constraints}
+\author{Matthias Mitterreiter}
+\begin{document}
+\begin{titlingpage}
+	\maketitle
+	\include{abstract}
+\end{titlingpage}
+\tableofcontents
+%\clearpage
+\input{introduction.tex}
+\input{theory.tex}
+\input{results.tex}
+{\footnotesize \bibliographystyle{acm}
+\bibliography{biblio}}
+\end{document}
